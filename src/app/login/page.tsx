@@ -1,18 +1,17 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-
-interface UserTheme {
-  name: string;
-  role: string;
-  bgClass: string;
-  borderClass: string;
-  textClass: string;
-  accentText: string;
+...
+export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="w-screen h-screen bg-[#0d0e12]" />}>
+      <DashboardContent />
+    </Suspense>
+  );
 }
 
-export default function DashboardPage() {
+function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
