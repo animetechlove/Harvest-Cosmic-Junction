@@ -2,16 +2,17 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-...
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={<div className="w-screen h-screen bg-[#0d0e12]" />}>
-      <DashboardContent />
-    </Suspense>
-  );
+
+interface UserTheme {
+  name: string;
+  role: string;
+  bgClass: string;
+  borderClass: string;
+  textClass: string;
+  accentText: string;
 }
 
-function DashboardContent() {
+export default function DashboardPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
