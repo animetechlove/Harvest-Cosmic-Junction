@@ -13,6 +13,14 @@ interface UserTheme {
 }
 
 export default function DashboardPage() {
+  return (
+    <Suspense fallback={<div className="w-screen h-screen bg-[#0d0e12]" />}>
+      <DashboardContent />
+    </Suspense>
+  );
+}
+
+function DashboardContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -49,7 +57,7 @@ export default function DashboardPage() {
 
   return (
     <main className={`w-screen h-screen ${theme.bgClass} ${theme.textClass} font-mono flex flex-col justify-between select-none overflow-hidden p-1`}>
-      
+
       {/* Vintage Workspace Header Toolbar */}
       <div className={`w-full bg-black/40 border-b-2 ${theme.borderClass} px-4 py-2 flex items-center justify-between text-xs`}>
         <div className="flex items-center gap-4">
@@ -63,9 +71,9 @@ export default function DashboardPage() {
 
       {/* Main OS Desktop Canvas Grid */}
       <div className="flex-1 p-6 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-6 items-start content-start">
-        
+
         {/* App Shortcut: Database File */}
-        <button 
+        <button
           onClick={() => alert(`Opening encrypted personal logs for ${theme.name}...`)}
           className={`flex flex-col items-center gap-2 p-2 rounded border border-transparent hover:bg-white/5 hover:${theme.borderClass} transition-all group w-24`}
         >
@@ -74,7 +82,7 @@ export default function DashboardPage() {
         </button>
 
         {/* App Shortcut: Communication / Transmissions */}
-        <button 
+        <button
           onClick={() => alert("Accessing active telemetry radio frequencies...")}
           className={`flex flex-col items-center gap-2 p-2 rounded border border-transparent hover:bg-white/5 hover:${theme.borderClass} transition-all group w-24`}
         >
@@ -83,7 +91,7 @@ export default function DashboardPage() {
         </button>
 
         {/* App Shortcut: Evidence Grid or Files */}
-        <button 
+        <button
           onClick={() => alert("Loading local map coordinates directory...")}
           className={`flex flex-col items-center gap-2 p-2 rounded border border-transparent hover:bg-white/5 hover:${theme.borderClass} transition-all group w-24`}
         >
@@ -96,8 +104,8 @@ export default function DashboardPage() {
       {/* Retro Footnote Taskbar */}
       <div className={`w-full bg-black/60 border-t-2 ${theme.borderClass} px-4 py-1.5 flex items-center justify-between text-[10px] opacity-70`}>
         <div>Click shortcut files to interface with terminal blocks.</div>
-        <button 
-          onClick={() => router.push('/login')} 
+        <button
+          onClick={() => router.push('/login')}
           className={`hover:underline font-bold ${theme.accentText}`}
         >
           [LOGOUT]
