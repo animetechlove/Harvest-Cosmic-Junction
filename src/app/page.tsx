@@ -59,6 +59,7 @@ export default function LoginPage() {
     
     if (passwordInput.toLowerCase() === selectedChar.passcode || passwordInput.toLowerCase() === 'guest') {
       setError(false);
+      localStorage.setItem('activeUser', selectedChar.id);
       router.push(`/dashboard?user=${selectedChar.id}`);
     } else {
       setError(true);
