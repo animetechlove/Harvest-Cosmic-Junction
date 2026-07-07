@@ -190,69 +190,17 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none font-mono">
-      {/* Approximated sunset sky + field background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#2b2350] via-[#7a4a7e] via-40% to-[#f4a15c]" />
-      <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-b from-[#3f6b3a] to-[#1f3a1c]" />
-
-      {/* Crescent moon */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2">
-        <div className="relative w-14 h-14 rounded-full bg-[#fff3c4] shadow-[0_0_30px_rgba(255,243,196,0.6)]">
-          <div className="absolute w-12 h-12 rounded-full bg-[#7a4a7e] -right-3 -top-1" />
-        </div>
-      </div>
-      {/* Sparkles */}
-      {[
-        [8, 10], [30, 22], [70, 14], [92, 26], [50, 6], [15, 30],
-      ].map(([left, top], i) => (
-        <span
-          key={i}
-          className="absolute text-white/70 text-sm"
-          style={{ left: `${left}%`, top: `${top}%` }}
-        >
-          ✦
-        </span>
-      ))}
-
-      {/* Telephone poles */}
-      {[20, 45, 68, 85].map((left, i) => (
-        <div key={i} className="absolute bottom-[25%] w-[2px] h-24 bg-black/30" style={{ left: `${left}%` }}>
-          <div className="absolute -left-2 top-2 w-6 h-[2px] bg-black/30" />
-        </div>
-      ))}
-
-      {/* Station silhouette */}
-      <div className="absolute bottom-[25%] right-[6%] w-40 h-20 bg-[#5a3d2b]/70">
-        <div
-          className="absolute -top-8 left-1/2 -translate-x-1/2 w-0 h-0"
-          style={{
-            borderLeft: '90px solid transparent',
-            borderRight: '90px solid transparent',
-            borderBottom: '40px solid rgba(90,61,43,0.7)',
-          }}
-        />
-        <div className="absolute inset-x-2 top-2 text-center text-[8px] text-[#f4e8d8] tracking-widest font-bold">
-          HARVEST MOON JUNCTION
-        </div>
-      </div>
-
-      {/* Title branding */}
-      <div className="absolute top-16 right-6 sm:right-16 text-center hidden sm:block">
-        <h1 className="text-4xl md:text-5xl font-bold text-amber-100 drop-shadow-[0_3px_0_rgba(0,0,0,0.5)] tracking-tight">
-          Harvest Moon
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-bold text-rose-200 drop-shadow-[0_2px_0_rgba(0,0,0,0.4)] tracking-widest -mt-1">
-          JUNCTION
-        </h2>
-        <p className="text-white/80 text-xs mt-2 max-w-xs mx-auto leading-relaxed">
-          A cozy slice-of-life comic about friendship, self-discovery, and the quiet magic of everyday life.
-        </p>
-      </div>
+      {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
+      />
 
       {/* Sticky notes */}
-      <div className="absolute top-6 right-4 sm:right-8 w-32 bg-yellow-100 text-yellow-900 text-[10px] p-2 rounded shadow-lg -rotate-3">
+      <div className="absolute top-6 right-4 sm:right-10 w-32 bg-yellow-100 text-yellow-900 text-[10px] p-2 rounded shadow-lg -rotate-3">
         New Comic Update every Friday!
       </div>
-      <div className="absolute bottom-[27%] right-4 sm:right-10 w-40 bg-yellow-100 text-yellow-900 text-[10px] p-2 rounded shadow-lg rotate-2">
+      <div className="absolute bottom-24 right-4 sm:right-10 w-40 bg-yellow-100 text-yellow-900 text-[10px] p-2 rounded shadow-lg rotate-2">
         Reminder: Junction Historical Society Meeting Tuesday! - K. Wright
       </div>
 
