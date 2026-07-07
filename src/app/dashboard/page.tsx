@@ -37,6 +37,50 @@ const CHARACTER_DATA: Record<string, Character> = {
       id: '0x12',
       text: '"Batch #108 is stable, but the catalytic threshold is off by two percent. The botanical samples from the lower quadrant are resisting synthesis under standard pressure. I might need to adjust the extraction timing manually. If Nova\'s array calculations are accurate, the environmental density will spike by midnight anyway. We\'re running out of clean glassware."'
     }
+  },
+  taylor: {
+    name: 'Taylor',
+    color: '#FF8C00', // Orange
+    textColor: 'text-[#FF8C00]',
+    accentColor: 'border-[#FF8C00]',
+    systemName: 'CASEFILE_TRACKER_v2.1',
+    logContent: {
+      id: '0x3D',
+      text: '"Three witnesses, three different timelines. Either everyone in town is lying to me, or the cosmic junction is doing something to memory itself. I cross-referenced the harvest schedules against Nova\'s signal logs — the gaps line up exactly with the blackout windows. That\'s not a coincidence. I need eyes on the perimeter before the next cycle."'
+    }
+  },
+  jace: {
+    name: 'Jace',
+    color: '#aac0af', // Moss
+    textColor: 'text-[#aac0af]',
+    accentColor: 'border-[#aac0af]',
+    systemName: 'FIELD_RIG_DIAGNOSTIC',
+    logContent: {
+      id: '0x7A',
+      text: '"Replaced the coupling on the harvest rig for the third time this month. Metal fatigue doesn\'t explain it — something is stressing these parts from the inside out. Rowan thinks it\'s the soil chemistry, but the wear pattern looks electromagnetic to me. Rigging a shielded sensor to see what it picks up."'
+    }
+  },
+  rowan: {
+    name: 'Rowan',
+    color: '#32CD32', // Lime
+    textColor: 'text-[#32CD32]',
+    accentColor: 'border-[#32CD32]',
+    systemName: 'BOTANICAL_SURVEY_LOG',
+    logContent: {
+      id: '0x21',
+      text: '"The lower quadrant samples are growing in spiral patterns again, always oriented toward the junction. I\'ve never seen phototropism behave like this without a light source. Kristin\'s extraction batches from the same soil are destabilizing faster than usual too. Whatever is under that field, it\'s not staying contained."'
+    }
+  },
+  orion: {
+    name: 'Orion',
+    color: '#9370DB', // Purple
+    textColor: 'text-[#9370DB]',
+    accentColor: 'border-[#9370DB]',
+    systemName: 'OBSERVATORY_DATALINK',
+    logContent: {
+      id: '0x5E',
+      text: '"Charted the sky against the harvest calendar going back forty years. Every major alignment matches a recorded disturbance at the junction, further back than anyone alive should remember. If Nova\'s calibration holds, the next convergence isn\'t decades away. It\'s weeks."'
+    }
   }
 };
 
