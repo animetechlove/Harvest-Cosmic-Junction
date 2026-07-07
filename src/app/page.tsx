@@ -1,4 +1,3 @@
-cat > src/app/page.tsx << 'PAGEEOF'
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -180,4 +179,3 @@ export default function LoginPage() {
     </main>
   );
 }
-PAGEEOF
