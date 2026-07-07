@@ -1,3 +1,4 @@
+cat > src/app/page.tsx << 'PAGEEOF'
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -16,6 +17,8 @@ interface CharacterProfile {
 export default function LoginPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [bootProgress, setBootProgress] = useState(0);
+  const [isBooted, setIsBooted] = useState(false);
 
   // Character profiles customized using your Tailwind configuration variables
   const characters: CharacterProfile[] = [
@@ -36,6 +39,22 @@ export default function LoginPage() {
     setMounted(true);
   }, []);
 
+  // 1b. Automatic BIOS Boot Simulator
+  useEffect(() => {
+    if (bootProgress < 100) {
+      const timeout = setTimeout(() => {
+        setBootProgress((prev) => Math.min(prev + 4, 100));
+      }, 80); // Adjust speed of the vintage text roll here
+      return () => clearTimeout(timeout);
+    } else {
+      // Small pause at 100% for dramatic cinematic effect
+      const transitionTimeout = setTimeout(() => {
+        setIsBooted(true);
+      }, 600);
+      return () => clearTimeout(transitionTimeout);
+    }
+  }, [bootProgress]);
+
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -51,6 +70,28 @@ export default function LoginPage() {
   // 2. Return an empty layout wrapper on the server side so there is zero HTML friction
   if (!mounted) {
     return <div className="w-screen h-screen bg-[#0d0e12]" />;
+  }
+
+  // 3. Vintage BIOS loading screen, shown before the character login grid
+  if (!isBooted) {
+    return (
+      <div className="min-h-screen w-screen bg-black text-green-500 font-mono p-6 space-y-2 text-xs md:text-sm select-none relative">
+        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] z-50" />
+        <p>CORE_SYS_INIT // HARVEST COSMIC JUNCTION v1.04</p>
+        <p>COGNITIVE ARCHITECTURE: ONLINE</p>
+        <p>LOADING QUANTUM FLUID ENGINE... OK</p>
+        <p>ESTABLISHING SECURE GATEWAY RELAY...</p>
+        <div className="pt-4">
+          <p className="text-white">PROCESSED: {bootProgress}%</p>
+          <div className="w-64 h-3 border border-green-500 mt-1 relative p-0.5">
+            <div
+              className="h-full bg-green-500 transition-all duration-75 ease-out"
+              style={{ width: `${bootProgress}%` }}
+            />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -139,3 +180,4 @@ export default function LoginPage() {
     </main>
   );
 }
+PAGEEOF
