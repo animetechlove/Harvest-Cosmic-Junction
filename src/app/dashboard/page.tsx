@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import DesktopWindow from '@/components/DesktopWindow';
+import KristinDesktop from './KristinDesktop';
 
 interface Character {
   name: string;
@@ -87,8 +87,14 @@ const CHARACTER_DATA: Record<string, Character> = {
 export default function DashboardPage() {
   const router = useRouter();
   const [character, setCharacter] = useState<Character | null>(null);
+  const [activeUserId, setActiveUserId] = useState<string | null>(null);
   const [isFileOpen, setIsFileOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
+
+  const handleLogout = () => {
+    localStorage.clear();
+    router.push('/');
+  };
 
   // Protect the route & load session state
   useEffect(() => {
@@ -96,6 +102,7 @@ export default function DashboardPage() {
     if (!activeUser || !CHARACTER_DATA[activeUser]) {
       router.push('/');
     } else {
+      setActiveUserId(activeUser);
       setCharacter(CHARACTER_DATA[activeUser]);
     }
 
@@ -109,7 +116,12 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [router]);
 
-  if (!character) return null;
+    if (!character) return null;
+
+  // Kristin gets a custom cozy desktop; everyone else uses the shared terminal dashboard below.
+  if (activeUserId === 'kristin') {
+    return <KristinDesktop onLogout={handleLogout} />;
+  }
 
   return (
     <div className="min-h-screen bg-black text-gray-400 p-4 font-mono select-none relative overflow-hidden">
