@@ -132,7 +132,7 @@ export default function LoginPage() {
       {/* Soft radial highlight, like the XP Welcome screen glow */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.25),transparent_60%)] pointer-events-none" />
 
-      <div className="relative z-10 flex-1 flex flex-col md:flex-row items-center justify-center gap-10 md:gap-0 px-6 md:px-0 overflow-y-auto py-8">
+            <div className="relative z-10 flex-1 flex flex-col md:flex-row items-[safe_center] justify-[safe_center] gap-10 md:gap-0 px-6 md:px-0 overflow-y-auto py-8">
         {/* Left: logo + tagline */}
         <div className="flex-1 flex flex-col items-center md:items-end md:pr-14 text-center md:text-right">
           <div className="flex items-center gap-4 mb-4">

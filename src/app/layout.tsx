@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import RotatePrompt from "@/components/RotatePrompt";
 
 export const metadata: Metadata = {
   title: "Harvest Cosmic Junction",
@@ -13,9 +14,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased bg-black min-h-screen m-0 p-0 overflow-x-hidden">
+          <body className="antialiased bg-black min-h-screen m-0 p-0 overflow-x-hidden">
+        <RotatePrompt />
         {children}
-      </body>
+      </body>  
     </html>
   );
 }
