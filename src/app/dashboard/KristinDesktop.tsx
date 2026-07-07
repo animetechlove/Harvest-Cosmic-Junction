@@ -201,9 +201,13 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
         className="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
         style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
       />
+          {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork).
+          background-size: cover always fills the screen edge-to-edge at true
+          aspect ratio (no stretching/distortion) in any orientation - the
+          trade-off is some cropping at the edges instead of empty gutters. */}
       <div
-        className="absolute inset-0 bg-no-repeat bg-center bg-contain"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
+        className="absolute inset-0 bg-cover"
+        style={{ backgroundImage: "url('/kristin-desktop-bg.png')", backgroundPosition: 'center 20%' }}
       />
 
       {/* Sticky notes */}
