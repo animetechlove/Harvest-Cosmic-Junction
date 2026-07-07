@@ -192,8 +192,7 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
     <div className="relative w-screen h-screen overflow-hidden select-none font-mono">
       {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork) */}
       <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
+
       />
 
       {/* Sticky notes */}

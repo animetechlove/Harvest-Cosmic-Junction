@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import DesktopWindow from '@/components/DesktopWindow';
 import KristinDesktop from './KristinDesktop';
 
 interface Character {
