@@ -71,24 +71,52 @@ export default function LoginPage() {
     return <div className="w-screen h-screen bg-[#0d0e12]" />;
   }
 
-  // 3. Vintage BIOS loading screen, shown before the character login grid
+  // 3. Vintage Inkstone Co. BIOS loading screen, shown before the character login grid
   if (!isBooted) {
+    const totalPips = 24;
+    const filledPips = Math.round((bootProgress / 100) * totalPips);
+    const progressBar = '#'.repeat(filledPips) + '.'.repeat(totalPips - filledPips);
+
     return (
-      <div className="min-h-screen w-screen bg-black text-green-500 font-mono p-6 space-y-2 text-xs md:text-sm select-none relative">
+      <div className="min-h-screen w-screen bg-black text-green-400 font-mono select-none relative flex flex-col items-center justify-center p-6 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] z-50" />
-        <p>CORE_SYS_INIT // HARVEST COSMIC JUNCTION v1.04</p>
-        <p>COGNITIVE ARCHITECTURE: ONLINE</p>
-        <p>LOADING QUANTUM FLUID ENGINE... OK</p>
-        <p>ESTABLISHING SECURE GATEWAY RELAY...</p>
-        <div className="pt-4">
-          <p className="text-white">PROCESSED: {bootProgress}%</p>
-          <div className="w-64 h-3 border border-green-500 mt-1 relative p-0.5">
-            <div
-              className="h-full bg-green-500 transition-all duration-75 ease-out"
-              style={{ width: `${bootProgress}%` }}
-            />
+
+        <div className="flex flex-col items-center [text-shadow:0_0_10px_rgba(74,222,128,0.7)]">
+          {/* Inkstone Co. crest: crossed pens, center crystal, ring of stars */}
+          <svg width="120" height="120" viewBox="0 0 100 100" className="mb-4">
+            <circle cx="50" cy="50" r="46" stroke="currentColor" strokeWidth="1.2" fill="none" />
+            {Array.from({ length: 12 }).map((_, i) => {
+              const angle = (i / 12) * 2 * Math.PI;
+              const x = 50 + 46 * Math.cos(angle);
+              const y = 50 + 46 * Math.sin(angle);
+              return <circle key={i} cx={x} cy={y} r="1.1" fill="currentColor" />;
+            })}
+            <line x1="26" y1="26" x2="74" y2="74" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+            <line x1="74" y1="26" x2="26" y2="74" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+            <polygon points="50,34 59,50 50,66 41,50" fill="currentColor" />
+          </svg>
+
+          <h1 className="text-3xl md:text-4xl font-bold tracking-widest uppercase">Inkstone Co.</h1>
+          <p className="text-xs md:text-sm tracking-widest uppercase mb-6 opacity-90">(Inkstone Collective)</p>
+
+          <div className="w-full max-w-md">
+            <div className="flex justify-between text-xs md:text-sm mb-1">
+              <span>SYSTEM STATUS: BOOTING...</span>
+              <span>LOAD %: {bootProgress}</span>
+            </div>
+            <div className="text-sm md:text-base border border-green-700 px-2 py-1 tracking-tighter whitespace-pre">
+              [{progressBar}]
+            </div>
+          </div>
+
+          <div className="mt-4 text-[10px] md:text-xs text-center opacity-80 space-y-0.5">
+            <p>KERNEL: InkstoneOS v1.4.1 [nite_owl]</p>
+            <p>SYSTEM: Inkstone Collective Ltd. All Rights Reserved</p>
           </div>
         </div>
+
+        <div className="absolute bottom-4 left-4 text-[10px] md:text-xs opacity-70">BIOS VERSION: 1999.IC.7</div>
+        <div className="absolute bottom-4 right-4 text-[10px] md:text-xs opacity-70">F2: Setup / F12: Boot</div>
       </div>
     );
   }
