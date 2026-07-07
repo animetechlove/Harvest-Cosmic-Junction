@@ -191,16 +191,12 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none font-mono">
            {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork).
-          Blurred cover layer fills the edges; sharp centered layer shows the
-          full illustration (logo and strawberries both visible) uncropped. */}
+          Stretched to fill the full viewport in any orientation, so the logo
+          and strawberries are both always fully visible with no cropping. */}
       <div
-        className="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
-      />
-      <div
-        className="absolute inset-0 bg-no-repeat bg-center"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')", backgroundSize: 'auto 100%' }}
-      /> 
+        className="absolute inset-0 bg-no-repeat"
+        style={{ backgroundImage: "url('/kristin-desktop-bg.png')", backgroundSize: '100% 100%' }}
+      />      
 
       {/* Sticky notes */}
       <div className="absolute top-6 right-4 sm:right-10 w-32 bg-yellow-100 text-yellow-900 text-[10px] p-2 rounded shadow-lg -rotate-3">
