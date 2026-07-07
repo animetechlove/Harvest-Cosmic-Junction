@@ -11,6 +11,8 @@ interface CharacterProfile {
   textColor: string;
   glowClass: string;
   bgColor: string;
+  avatarTextColor: string;
+  avatarSrc: string;
   passcode: string;
 }
 
@@ -22,12 +24,12 @@ export default function LoginPage() {
 
   // Character profiles customized using your Tailwind configuration variables
   const characters: CharacterProfile[] = [
-    { id: 'kristin', name: 'Kristin', role: 'Town Historian', borderColor: 'border-kristin-maroon', textColor: 'text-kristin-maroon', glowClass: 'shadow-[0_0_15px_rgba(128,0,32,0.5)]', bgColor: 'bg-[#800020]', passcode: 'history' },
-    { id: 'taylor', name: 'Taylor', role: 'Mystery Solver', borderColor: 'border-taylor-orange', textColor: 'text-taylor-orange', glowClass: 'shadow-[0_0_15px_rgba(255,140,0,0.5)]', bgColor: 'bg-[#FF8C00]', passcode: 'clue' },
-    { id: 'nova', name: 'Nova', role: 'Cosmic Weaver', borderColor: 'border-nova-cyan', textColor: 'text-nova-cyan', glowClass: 'shadow-[0_0_15px_rgba(0,255,255,0.5)]', bgColor: 'bg-[#4b0082]', passcode: 'signal' },
-    { id: 'jace', name: 'Jace', role: 'Mechanic / Engineer', borderColor: 'border-jace-steel', textColor: 'text-jace-moss', glowClass: 'shadow-[0_0_15px_rgba(170,192,175,0.4)]', bgColor: 'bg-[#555555]', passcode: 'wrench' },
-    { id: 'rowan', name: 'Rowan', role: 'Botanist', borderColor: 'border-rowan-forest', textColor: 'text-rowan-lime', glowClass: 'shadow-[0_0_15px_rgba(50,205,50,0.5)]', bgColor: 'bg-[#228B22]', passcode: 'clover' },
-    { id: 'orion', name: 'Orion', role: 'Stargazer', borderColor: 'border-orion-royal', textColor: 'text-orion-purple', glowClass: 'shadow-[0_0_15px_rgba(147,112,219,0.5)]', bgColor: 'bg-[#4169E1]', passcode: 'nebula' },
+    { id: 'kristin', name: 'Kristin', role: 'Town Historian', borderColor: 'border-kristin-maroon', textColor: 'text-kristin-maroon', glowClass: 'shadow-[0_0_15px_rgba(128,0,32,0.5)]', bgColor: 'bg-[#800020]', avatarTextColor: 'text-white', avatarSrc: '/avatars/kristin.png', passcode: 'history' },
+    { id: 'taylor', name: 'Taylor', role: 'Mystery Solver', borderColor: 'border-taylor-orange', textColor: 'text-taylor-orange', glowClass: 'shadow-[0_0_15px_rgba(255,140,0,0.5)]', bgColor: 'bg-[#FF8C00]', avatarTextColor: 'text-white', avatarSrc: '/avatars/taylor.png', passcode: 'clue' },
+    { id: 'nova', name: 'Nova', role: 'Cosmic Weaver', borderColor: 'border-nova-cyan', textColor: 'text-nova-cyan', glowClass: 'shadow-[0_0_15px_rgba(0,255,255,0.5)]', bgColor: 'bg-[#4b0082]', avatarTextColor: 'text-white', avatarSrc: '/avatars/nova.png', passcode: 'signal' },
+    { id: 'jace', name: 'Jace', role: 'Mechanic / Engineer', borderColor: 'border-jace-steel', textColor: 'text-jace-moss', glowClass: 'shadow-[0_0_15px_rgba(170,192,175,0.4)]', bgColor: 'bg-[#aac0af]', avatarTextColor: 'text-[#2f3a30]', avatarSrc: '/avatars/jace.png', passcode: 'wrench' },
+    { id: 'rowan', name: 'Rowan', role: 'Botanist', borderColor: 'border-rowan-forest', textColor: 'text-rowan-lime', glowClass: 'shadow-[0_0_15px_rgba(50,205,50,0.5)]', bgColor: 'bg-[#228B22]', avatarTextColor: 'text-white', avatarSrc: '/avatars/rowan.png', passcode: 'clover' },
+    { id: 'orion', name: 'Orion', role: 'Stargazer', borderColor: 'border-orion-royal', textColor: 'text-orion-purple', glowClass: 'shadow-[0_0_15px_rgba(147,112,219,0.5)]', bgColor: 'bg-[#4169E1]', avatarTextColor: 'text-white', avatarSrc: '/avatars/orion.png', passcode: 'nebula' },
   ];
 
   const [selectedChar, setSelectedChar] = useState<CharacterProfile>(characters[0]);
@@ -168,8 +170,21 @@ export default function LoginPage() {
                     isActive ? 'bg-white/25 shadow-inner' : 'hover:bg-white/10'
                   }`}
                 >
-                  <div className={`w-12 h-12 shrink-0 rounded-md ${char.bgColor} flex items-center justify-center text-white font-bold text-lg shadow-[0_2px_4px_rgba(0,0,0,0.4)] border border-white/30`}>
-                    {char.name.charAt(0)}
+                  <div className={`w-12 h-12 shrink-0 rounded-md overflow-hidden ${char.bgColor} shadow-[0_2px_4px_rgba(0,0,0,0.4)] border border-white/30`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={char.avatarSrc}
+                      alt={char.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <span className={`w-full h-full ${char.avatarTextColor} font-bold text-lg items-center justify-center hidden`}>
+                      {char.name.charAt(0)}
+                    </span>
                   </div>
                   <div>
                     <div className="text-white font-semibold text-base drop-shadow-sm">{char.name}</div>
