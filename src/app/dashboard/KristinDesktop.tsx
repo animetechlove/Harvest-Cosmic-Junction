@@ -7,62 +7,142 @@ interface IconDef {
   label: string;
   icon: string;
   windowTitle: string;
+  isFolder?: boolean;
 }
 
 const ICONS: IconDef[] = [
-  { id: 'charter', label: 'kw_TownCharter_1924_ANNOTATED.pdf', icon: '📜', windowTitle: 'kw_TownCharter_1924_ANNOTATED.pdf' },
-  { id: 'railway', label: 'RailwayMaps_1918-1952_OVERLAY.png', icon: '🗺️', windowTitle: 'RailwayMaps_1918-1952_OVERLAY.png' },
-  { id: 'surveys', label: 'PropertySurveys_CrossRef_DO_NOT_DELETE', icon: '📁', windowTitle: 'PropertySurveys_CrossRef_DO_NOT_DELETE' },
-  { id: 'signrefurb', label: 'SignRefurb_Ledger_discrepancies.xlsx', icon: '📊', windowTitle: 'SignRefurb_Ledger_discrepancies.xlsx' },
-  { id: 'archivedb', label: 'JunctionArchive_ACCESS.exe', icon: '💻', windowTitle: 'JunctionArchive_ACCESS.exe' },
-  { id: 'journal', label: 'kw_fieldnotes_DRAFT7.wpd', icon: '📝', windowTitle: "K. Wright — Field Notes" },
+  { id: 'journal', label: 'Soul_Bible.jrnl', icon: '📖', windowTitle: "Kristen's Soul Bible" },
+  { id: 'shadow', label: 'Shadow_Sightings.log', icon: '🐈‍⬛', windowTitle: 'Shadow_Sightings.log' },
+  { id: 'archives', label: 'Harvest Junction Archives', icon: '📂', windowTitle: 'Harvest Junction Archives', isFolder: true },
+  { id: 'orchard', label: 'Rose_and_Strawberry_Orchard.notes', icon: '🍓', windowTitle: 'Rose_and_Strawberry_Orchard.notes' },
+  { id: 'lantern', label: 'Legacy_Lantern_Specs.pdf', icon: '🏮', windowTitle: 'Legacy_Lantern_Specs.pdf' },
+  { id: 'derez', label: 'DeRez_Incident_Log.txt', icon: '⚠️', windowTitle: 'DeRez_Incident_Log.txt' },
+  { id: 'novanet', label: 'NovaNet_Archive_ACCESS.exe', icon: '💻', windowTitle: 'NovaNet_Archive_ACCESS.exe' },
+  { id: 'ceramics', label: 'Ceramics_Studio_Inventory.xlsx', icon: '🏺', windowTitle: 'Ceramics_Studio_Inventory.xlsx' },
 ];
 
+const DEFAULT_ICON_POSITIONS: Record<string, { x: number; y: number }> = {
+  journal: { x: 24, y: 20 },
+  shadow: { x: 154, y: 20 },
+  archives: { x: 24, y: 112 },
+  orchard: { x: 154, y: 112 },
+  lantern: { x: 24, y: 204 },
+  derez: { x: 154, y: 204 },
+  novanet: { x: 24, y: 296 },
+  ceramics: { x: 154, y: 296 },
+};
+
 const WINDOW_LINES: Record<string, string[]> = {
-  charter: [
-    'My scan of the 1924 charter, third pass. Marginal notes are mine.',
-    'Article 7 — "junction easement granted to [ILLEGIBLE]." I have read this line more times than I should admit and it does not get more legible.',
-    'The signature block is smudged in a way that looks deliberate, not aged. Compare against the sign refurb ledger — same ink behavior?',
+  shadow: [
+    "10:52 PM — Shadow's staring at the hedge again. Nothing there. There's never anything there when I look.",
+    "He caught something in the strawberry patch tonight and wouldn't show me. Left a little smear of ash on the porch step instead.",
+    'Cats are supposed to not care about much. Mine flinches at static like it said his name.',
   ],
-  railway: [
-    'Overlay of the 1918, 1934, and 1952 survey maps, aligned by the platform corner.',
-    'The spur line bends near the junction with no grade reason to bend at all. I checked with an actual rail engineer. He had no explanation either.',
-    'Tracing the bend across all three maps: it is measurably straighter each decade. Tracks do not do that on their own.',
+  archives: [
+    'Old town charter, scanned page by page. Article 7 still doesn\'t explain the "junction easement" — I\'ve read that line more times than I should admit.',
+    'Central Library records, half of them technically shouldn\'t still exist. I\'m not going to be the one who asks why out loud.',
+    "Keep finding references to something called a 'Master Index' in the margins. No idea what it indexes. Yet.",
   ],
-  surveys: [
-    'PropertySurveys_CrossRef_DO_NOT_DELETE/',
-    '  survey_1952.pdf',
-    '  survey_1968.pdf',
-    '  survey_1985.pdf',
-    '  survey_2003.pdf',
+  orchard: [
+    'Grandma planted the blue roses the year she moved here. She told me once they only grow where something is remembered.',
+    "The county wants to 'rezone' the east row. Nobody but me seems to notice that's also where the flickering started.",
+    "The strawberry bushes came back this morning like nothing happened. I'm fairly sure I'm the only one who noticed they'd ever left.",
+  ],
+  lantern: [
+    "The lantern's been in the family longer than anyone can actually date. It doesn't run on anything I can identify, and I've tried.",
+    'It lights on its own near the tree line. Only ever at 8 PM, never earlier, never later.',
+    "When it's lit, the paths through the orchard that don't usually make sense... do.",
+  ],
+  derez: [
+    '[LOG] 8:04 PM — patch of grass by the fence went grey for six seconds. Grew back green like it was embarrassed.',
+    "[LOG] Strawberry bush, row 3: gone, then not gone. Didn't tell anyone. They'd just send someone to 'check on me.'",
+    "[LOG] The static has a smell. Burnt copper. I don't know how I know that, but I do, every time.",
+  ],
+  novanet: [
+    'CONNECTING TO NOVA.NET ARCHIVE...',
+    'ACCESS LEVEL: GUEST — the town won\'t give a historian more than that, apparently.',
     '',
-    'Four surveyors, four decades, zero explanation given — all four mark this same plot "unbuildable." I want to know who wrote that the first time and made everyone after just copy it down.',
+    "One file keeps re-appearing no matter how many times it gets marked deleted: MASTER_INDEX.gold",
+    "I don't know who else has seen this. I don't think I'm supposed to have.",
   ],
-  signrefurb: [
-    'Refurbishment ledger for the old station sign, cross-checked against town spending records.',
-    'Row 14: relettering ordered. Under UV the original plaque underneath reads differently. I did not imagine this — I checked it twice, at night, alone, which in hindsight was not my best decision.',
-    'Row 22: cost overrun flagged, reason left blank. Same handwriting as the charter\'s smudged signature. I am almost certain of it.',
-  ],
-  archivedb: [
-    'CONNECTING TO JUNCTION_ARCHIVE_DB...',
-    'ACCESS LEVEL: HISTORIAN (READ-ONLY)',
-    '',
-    '3 records flagged "DO NOT DIGITIZE" by the previous archivist, no reason given.',
-    'Naturally, those are the three I want most.',
+  ceramics: [
+    'Kiln log — bisque firing Tuesday, glaze Thursday if the studio actually holds temperature this time.',
+    'Finally got the cat-shaped charm right on the third try. Grandma always said the third try is the honest one.',
+    "Note to self: clay from the east row of the orchard fires darker than it should. Haven't decided if I want to know why.",
   ],
 };
 
 const JOURNAL_ENTRIES = [
-  'Entry 147: New evidence on the original railway bridge materials — the timber doesn\'t match anything regionally sourced in 1918. Ordering a second opinion.',
-  'Note to self: cross-reference the 1952 survey against the charter\'s Article 7 language before I forget the wording again.',
-  'Task: oral history digitization at 85%. The tapes get quieter whenever the junction comes up. Might be the recorder. Might not be.',
-  "Thought: keep finding the phrase 'Harvest Cosmic Junction' in places it shouldn't be — margins, ledgers, one survey map's verso. Someone else was keeping notes before me.",
+  "Grandma's blue rose flickered again tonight — just for a second, like it forgot what it was supposed to be. I kept my hand on the dirt until it stopped.",
+  "Shadow won't sleep by the window anymore. He sits by the door instead, ears up, like something's coming and he'd rather see it first.",
+  'I keep telling myself the strawberry rows are fine. Three of them went quiet last week. Not dead — just gone, then back, like a held breath.',
+  "Started calling myself the Librarian of the Lost in my head. Don't know if that's brave or just what happens when nobody else is looking.",
 ];
 
 interface OpenWindow {
   id: string;
   x: number;
   y: number;
+}
+
+const DRAG_THRESHOLD = 4;
+
+function DraggableIcon({
+  id,
+  x,
+  y,
+  onMove,
+  onOpen,
+  children,
+}: {
+  id: string;
+  x: number;
+  y: number;
+  onMove: (id: string, x: number, y: number) => void;
+  onOpen: (id: string) => void;
+  children: React.ReactNode;
+}) {
+  const dragState = useRef<{ startX: number; startY: number; origX: number; origY: number; moved: boolean } | null>(null);
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!dragState.current) return;
+      const dx = e.clientX - dragState.current.startX;
+      const dy = e.clientY - dragState.current.startY;
+      if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
+        dragState.current.moved = true;
+      }
+      onMove(id, dragState.current.origX + dx, dragState.current.origY + dy);
+    },
+    [id, onMove]
+  );
+
+  const handleMouseUp = useCallback(() => {
+    const wasDrag = dragState.current?.moved;
+    dragState.current = null;
+    window.removeEventListener('mousemove', handleMouseMove);
+    window.removeEventListener('mouseup', handleMouseUp);
+    if (!wasDrag) onOpen(id);
+  }, [handleMouseMove, onOpen, id]);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    dragState.current = { startX: e.clientX, startY: e.clientY, origX: x, origY: y, moved: false };
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+  };
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
+
+  return (
+    <div className="absolute w-[120px]" style={{ left: x, top: y }} onMouseDown={handleMouseDown}>
+      {children}
+    </div>
+  );
 }
 
 function DraggableWindow({
@@ -152,6 +232,7 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
   const [zOrder, setZOrder] = useState<string[]>([]);
   const [startMenuOpen, setStartMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
+  const [iconPositions, setIconPositions] = useState(DEFAULT_ICON_POSITIONS);
   const nextOffset = useRef(0);
 
   useEffect(() => {
@@ -189,6 +270,10 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
     setOpenWindows((prev) => prev.map((w) => (w.id === id ? { ...w, x, y } : w)));
   }, []);
 
+  const moveIcon = useCallback((id: string, x: number, y: number) => {
+    setIconPositions((prev) => ({ ...prev, [id]: { x, y } }));
+  }, []);
+
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none font-mono">
       {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork),
@@ -207,22 +292,20 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
         Reminder: Junction Historical Society Meeting Tuesday! - K. Wright
       </div>
 
-      {/* Desktop icons */}
-      <div className="absolute top-4 left-4 grid grid-cols-2 gap-x-6 gap-y-4 w-[280px] sm:w-[340px]">
-        {ICONS.map((iconDef) => (
-          <button
-            key={iconDef.id}
-            onDoubleClick={() => openWindow(iconDef.id)}
-            onClick={() => openWindow(iconDef.id)}
-            className="w-full flex flex-col items-center text-center p-2 rounded hover:bg-white/10 focus:bg-white/20 transition-colors cursor-pointer"
-          >
-            <span className="text-3xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">{iconDef.icon}</span>
-            <span className="w-full text-[10px] text-white mt-1 leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] break-words">
-              {iconDef.label}
-            </span>
-          </button>
-        ))}
-      </div>
+      {/* Desktop icons — draggable, click (without dragging) to open */}
+      {ICONS.map((iconDef) => {
+        const pos = iconPositions[iconDef.id] ?? DEFAULT_ICON_POSITIONS[iconDef.id];
+        return (
+          <DraggableIcon key={iconDef.id} id={iconDef.id} x={pos.x} y={pos.y} onMove={moveIcon} onOpen={openWindow}>
+            <div className="w-full flex flex-col items-center text-center p-2 rounded hover:bg-white/10 select-none cursor-grab active:cursor-grabbing">
+              <span className="text-3xl drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">{iconDef.icon}</span>
+              <span className="w-full text-[10px] text-white mt-1 leading-tight drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] break-words">
+                {iconDef.label}
+              </span>
+            </div>
+          </DraggableIcon>
+        );
+      })}
 
       {/* Open windows */}
       {openWindows.map((w) => {
