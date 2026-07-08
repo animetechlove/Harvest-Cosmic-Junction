@@ -21,6 +21,9 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
   const [bootProgress, setBootProgress] = useState(0);
   const [isBooted, setIsBooted] = useState(false);
+  const [isShuttingDown, setIsShuttingDown] = useState(false);
+  const [shutdownProgress, setShutdownProgress] = useState(100);
+  const [shutdownDone, setShutdownDone] = useState(false);
 
   // Character profiles customized using your Tailwind configuration variables
   const characters: CharacterProfile[] = [
@@ -58,6 +61,37 @@ export default function LoginPage() {
     }
   }, [bootProgress]);
 
+  // 1c. Shutdown countdown, mirrors the boot sequence in reverse
+  useEffect(() => {
+    if (!isShuttingDown) return;
+    if (shutdownProgress > 0) {
+      const timeout = setTimeout(() => {
+        setShutdownProgress((prev) => Math.max(prev - 4, 0));
+      }, 80);
+      return () => clearTimeout(timeout);
+    } else {
+      const transitionTimeout = setTimeout(() => {
+        setShutdownDone(true);
+      }, 600);
+      return () => clearTimeout(transitionTimeout);
+    }
+  }, [isShuttingDown, shutdownProgress]);
+
+  const handleShutdown = () => {
+    setIsShuttingDown(true);
+  };
+
+  const handleReboot = () => {
+    setIsShuttingDown(false);
+    setShutdownProgress(100);
+    setShutdownDone(false);
+    setBootProgress(0);
+    setIsBooted(false);
+    setFormVisible(false);
+    setError(false);
+    setPasswordInput('');
+  };
+
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -74,6 +108,47 @@ export default function LoginPage() {
   // 2. Return an empty layout wrapper on the server side so there is zero HTML friction
   if (!mounted) {
     return <div className="w-screen h-screen bg-[#0d0e12]" />;
+  }
+
+  // 2b. Shutdown sequence, triggered from "Turn off computer"
+  if (isShuttingDown) {
+    const totalPips = 24;
+    const filledPips = Math.round((shutdownProgress / 100) * totalPips);
+    const progressBar = '#'.repeat(filledPips) + '.'.repeat(totalPips - filledPips);
+
+    return (
+      <div
+        className="min-h-screen w-screen bg-black text-green-400 font-mono select-none relative flex flex-col items-center justify-center p-6 overflow-hidden cursor-pointer"
+        onClick={() => shutdownDone && handleReboot()}
+      >
+        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] z-50" />
+
+        {!shutdownDone ? (
+          <div className="flex flex-col items-center [text-shadow:0_0_10px_rgba(74,222,128,0.7)]">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-widest uppercase mb-6">Inkstone Co.</h1>
+            <div className="w-full max-w-md sm:max-w-lg">
+              <div className="flex justify-between gap-4 text-xs md:text-sm mb-1">
+                <span>STATUS: SHUTTING DOWN...</span>
+                <span>LOAD %: {shutdownProgress}</span>
+              </div>
+              <div className="text-sm md:text-base border border-green-700 px-2 py-1 tracking-tighter whitespace-pre">
+                [{progressBar}]
+              </div>
+            </div>
+            <div className="mt-4 text-[10px] md:text-xs text-center opacity-80 space-y-0.5">
+              <p>Closing all open case files...</p>
+              <p>Archiving session to Inkstone Collective servers...</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center text-center [text-shadow:0_0_10px_rgba(74,222,128,0.7)]">
+            <p className="text-lg md:text-xl mb-2 animate-pulse">It is now safe to turn off your Inkstone Co. terminal.</p>
+            <p className="text-xs md:text-sm opacity-70">...see you at the junction.</p>
+            <p className="mt-8 text-[10px] md:text-xs opacity-50">Click anywhere to reboot</p>
+          </div>
+        )}
+      </div>
+    );
   }
 
   // 3. Vintage Inkstone Co. BIOS loading screen, shown before the character login grid
@@ -227,10 +302,14 @@ export default function LoginPage() {
 
       {/* Footer bar, styled like the XP welcome screen bottom strip */}
       <div className="relative z-10 border-t border-white/25 bg-black/10 px-6 sm:px-12 py-3 flex items-center justify-between text-white text-xs sm:text-sm shrink-0">
-        <div className="flex items-center gap-2 opacity-90">
+        <button
+          type="button"
+          onClick={handleShutdown}
+          className="flex items-center gap-2 opacity-90 hover:opacity-100 cursor-pointer rounded px-1 py-0.5 hover:bg-white/10 transition-colors"
+        >
           <span className="w-6 h-6 rounded-full bg-gradient-to-b from-orange-400 to-red-600 flex items-center justify-center text-[10px] shadow-[0_0_4px_rgba(0,0,0,0.5)]">⏻</span>
           <span>Turn off computer</span>
-        </div>
+        </button>
         <div className="text-right text-white/80 leading-tight hidden sm:block">
           <div>After you log in, you can add or change accounts.</div>
           <div>Just go to Control Panel and click User Accounts.</div>
