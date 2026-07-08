@@ -246,13 +246,13 @@ export default function TaylorDesktop({ onLogout }: { onLogout: () => void }) {
       <div className="flex-1 relative overflow-hidden">
         <div
           className="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
-          style={{ backgroundImage: "url('/taylor-desktop-canvas.png')" }}
+          style={{ backgroundImage: "url('/taylordesktopcanvas.png')" }}
         />
         <div className="absolute inset-0 flex items-center justify-center">
         <div className="relative h-full max-w-full aspect-[922/1092]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/taylor-desktop-canvas.png"
+            src="/taylordesktopcanvas.png"
             alt="Taylor's case-file desktop"
             className="w-full h-full object-contain select-none pointer-events-none"
             draggable={false}
