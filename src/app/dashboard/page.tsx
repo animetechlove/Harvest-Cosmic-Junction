@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import DesktopWindow from '@/components/DesktopWindow';
 import KristinDesktop from './KristinDesktop';
+import TaylorDesktop from './TaylorDesktop';
 
 interface Character {
   name: string;
@@ -119,9 +120,12 @@ export default function DashboardPage() {
 
     if (!character) return null;
 
-  // Kristin gets a custom cozy desktop; everyone else uses the shared terminal dashboard below.
+  // Kristin and Taylor get custom desktops; everyone else uses the shared terminal dashboard below.
   if (activeUserId === 'kristin') {
     return <KristinDesktop onLogout={handleLogout} />;
+  }
+  if (activeUserId === 'taylor') {
+    return <TaylorDesktop onLogout={handleLogout} />;
   }
 
   return (
