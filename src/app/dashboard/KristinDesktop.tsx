@@ -104,11 +104,11 @@ function DraggableIcon({
 }) {
   const dragState = useRef<{ startX: number; startY: number; origX: number; origY: number; moved: boolean } | null>(null);
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
+  const updatePosition = useCallback(
+    (clientX: number, clientY: number) => {
       if (!dragState.current) return;
-      const dx = e.clientX - dragState.current.startX;
-      const dy = e.clientY - dragState.current.startY;
+      const dx = clientX - dragState.current.startX;
+      const dy = clientY - dragState.current.startY;
       if (Math.abs(dx) > DRAG_THRESHOLD || Math.abs(dy) > DRAG_THRESHOLD) {
         dragState.current.moved = true;
       }
@@ -117,29 +117,57 @@ function DraggableIcon({
     [id, onMove]
   );
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseMove = useCallback((e: MouseEvent) => updatePosition(e.clientX, e.clientY), [updatePosition]);
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      e.preventDefault();
+      updatePosition(touch.clientX, touch.clientY);
+    },
+    [updatePosition]
+  );
+
+  const endDrag = useCallback(() => {
     const wasDrag = dragState.current?.moved;
     dragState.current = null;
     window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
+    window.removeEventListener('mouseup', endDrag);
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('touchend', endDrag);
     if (!wasDrag) onOpen(id);
-  }, [handleMouseMove, onOpen, id]);
+  }, [handleMouseMove, handleTouchMove, onOpen, id]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     dragState.current = { startX: e.clientX, startY: e.clientY, origX: x, origY: y, moved: false };
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseup', endDrag);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    dragState.current = { startX: touch.clientX, startY: touch.clientY, origX: x, origY: y, moved: false };
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', endDrag);
   };
 
   useEffect(() => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', endDrag);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', endDrag);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [handleMouseMove, handleTouchMove, endDrag]);
 
   return (
-    <div className="absolute w-[120px]" style={{ left: x, top: y }} onMouseDown={handleMouseDown}>
+    <div
+      className="absolute w-[120px] touch-none"
+      style={{ left: x, top: y }}
+      onMouseDown={handleMouseDown}
+      onTouchStart={handleTouchStart}
+    >
       {children}
     </div>
   );
@@ -170,35 +198,59 @@ function DraggableWindow({
 }) {
   const dragState = useRef<{ startX: number; startY: number; origX: number; origY: number } | null>(null);
 
-  const handleMouseMove = useCallback(
-    (e: MouseEvent) => {
+  const updatePosition = useCallback(
+    (clientX: number, clientY: number) => {
       if (!dragState.current) return;
-      const dx = e.clientX - dragState.current.startX;
-      const dy = e.clientY - dragState.current.startY;
+      const dx = clientX - dragState.current.startX;
+      const dy = clientY - dragState.current.startY;
       onMove(id, dragState.current.origX + dx, dragState.current.origY + dy);
     },
     [id, onMove]
   );
 
-  const handleMouseUp = useCallback(() => {
+  const handleMouseMove = useCallback((e: MouseEvent) => updatePosition(e.clientX, e.clientY), [updatePosition]);
+  const handleTouchMove = useCallback(
+    (e: TouchEvent) => {
+      const touch = e.touches[0];
+      if (!touch) return;
+      e.preventDefault();
+      updatePosition(touch.clientX, touch.clientY);
+    },
+    [updatePosition]
+  );
+
+  const endDrag = useCallback(() => {
     dragState.current = null;
     window.removeEventListener('mousemove', handleMouseMove);
-    window.removeEventListener('mouseup', handleMouseUp);
-  }, [handleMouseMove]);
+    window.removeEventListener('mouseup', endDrag);
+    window.removeEventListener('touchmove', handleTouchMove);
+    window.removeEventListener('touchend', endDrag);
+  }, [handleMouseMove, handleTouchMove]);
 
   const handleTitleMouseDown = (e: React.MouseEvent) => {
     onFocus(id);
     dragState.current = { startX: e.clientX, startY: e.clientY, origX: x, origY: y };
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
+    window.addEventListener('mouseup', endDrag);
+  };
+
+  const handleTitleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    if (!touch) return;
+    onFocus(id);
+    dragState.current = { startX: touch.clientX, startY: touch.clientY, origX: x, origY: y };
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', endDrag);
   };
 
   useEffect(() => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mouseup', endDrag);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', endDrag);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [handleMouseMove, handleTouchMove, endDrag]);
 
   return (
     <div
@@ -207,8 +259,9 @@ function DraggableWindow({
       onMouseDown={() => onFocus(id)}
     >
       <div
-        className="flex items-center justify-between px-2 py-1.5 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-600 text-white text-sm font-bold rounded-t cursor-move"
+        className="flex items-center justify-between px-2 py-1.5 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-600 text-white text-sm font-bold rounded-t cursor-move touch-none"
         onMouseDown={handleTitleMouseDown}
+        onTouchStart={handleTitleTouchStart}
       >
         <span className="truncate">{title}</span>
         <button
