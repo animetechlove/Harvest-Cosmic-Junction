@@ -1,10 +1,10 @@
 export default function RotatePrompt() {
   return (
-    <div className="fixed inset-0 z-[9999] hidden portrait:flex flex-col items-center justify-center bg-black text-white text-center p-8 gap-4 font-mono">
-      <div className="text-6xl rotate-hint-icon">📱</div>
-      <p className="text-lg max-w-xs">
-        Please rotate your device to landscape for the best experience.
-      </p>
+    <div className="fixed top-2 inset-x-0 z-[9999] hidden portrait:flex justify-center pointer-events-none font-mono">
+      <div className="flex items-center gap-2 bg-black/80 text-white text-xs rounded-full px-3 py-1.5 shadow-lg pointer-events-auto">
+        <span className="text-base rotate-hint-icon">📱</span>
+        <span>Rotate for the best experience</span>
+      </div>
     </div>
   );
 }
