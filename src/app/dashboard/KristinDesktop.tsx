@@ -10,52 +10,53 @@ interface IconDef {
 }
 
 const ICONS: IconDef[] = [
-  { id: 'charter', label: 'Town_Charter_Scan_1924.pdf', icon: '📜', windowTitle: 'Town_Charter_Scan_1924.pdf' },
-  { id: 'railway', label: 'Original_Railway_Maps_Merged.png', icon: '🗺️', windowTitle: 'Original_Railway_Maps_Merged.png' },
-  { id: 'surveys', label: 'Historic_Property_Surveys_Sorted_by_Date', icon: '📁', windowTitle: 'Historic_Property_Surveys_Sorted_by_Date' },
-  { id: 'signrefurb', label: 'Historic_Sign_Refurb_Plant.xlsx', icon: '📊', windowTitle: 'Historic_Sign_Refurb_Plant.xlsx' },
-  { id: 'archivedb', label: 'Junction_Archive_Database_Login.exe', icon: '💻', windowTitle: 'Junction_Archive_Database_Login.exe' },
-  { id: 'journal', label: 'Voices_of_Junction_FINAL_Draft.wpd', icon: '📝', windowTitle: "Historian's Journal Entry" },
+  { id: 'charter', label: 'kw_TownCharter_1924_ANNOTATED.pdf', icon: '📜', windowTitle: 'kw_TownCharter_1924_ANNOTATED.pdf' },
+  { id: 'railway', label: 'RailwayMaps_1918-1952_OVERLAY.png', icon: '🗺️', windowTitle: 'RailwayMaps_1918-1952_OVERLAY.png' },
+  { id: 'surveys', label: 'PropertySurveys_CrossRef_DO_NOT_DELETE', icon: '📁', windowTitle: 'PropertySurveys_CrossRef_DO_NOT_DELETE' },
+  { id: 'signrefurb', label: 'SignRefurb_Ledger_discrepancies.xlsx', icon: '📊', windowTitle: 'SignRefurb_Ledger_discrepancies.xlsx' },
+  { id: 'archivedb', label: 'JunctionArchive_ACCESS.exe', icon: '💻', windowTitle: 'JunctionArchive_ACCESS.exe' },
+  { id: 'journal', label: 'kw_fieldnotes_DRAFT7.wpd', icon: '📝', windowTitle: "K. Wright — Field Notes" },
 ];
 
 const WINDOW_LINES: Record<string, string[]> = {
   charter: [
-    'Digitized scan of the original 1924 town charter.',
-    'Article 7 references a "junction easement" granted to an unnamed party...',
-    'The signature block is smudged beyond recognition.',
+    'My scan of the 1924 charter, third pass. Marginal notes are mine.',
+    'Article 7 — "junction easement granted to [ILLEGIBLE]." I have read this line more times than I should admit and it does not get more legible.',
+    'The signature block is smudged in a way that looks deliberate, not aged. Compare against the sign refurb ledger — same ink behavior?',
   ],
   railway: [
-    'Merged railway survey maps, 1918-1952.',
-    'The original spur line bends sharply near the junction for no engineering reason anyone can explain.',
-    'Overlaying three decades of maps shows the bend has slowly been "straightening" itself.',
+    'Overlay of the 1918, 1934, and 1952 survey maps, aligned by the platform corner.',
+    'The spur line bends near the junction with no grade reason to bend at all. I checked with an actual rail engineer. He had no explanation either.',
+    'Tracing the bend across all three maps: it is measurably straighter each decade. Tracks do not do that on their own.',
   ],
   surveys: [
-    'Historic_Property_Surveys_Sorted_by_Date/',
+    'PropertySurveys_CrossRef_DO_NOT_DELETE/',
     '  survey_1952.pdf',
     '  survey_1968.pdf',
     '  survey_1985.pdf',
     '  survey_2003.pdf',
     '',
-    'All four surveys mark the same plot as "unbuildable" without explanation.',
+    'Four surveyors, four decades, zero explanation given — all four mark this same plot "unbuildable." I want to know who wrote that the first time and made everyone after just copy it down.',
   ],
   signrefurb: [
-    'Refurbishment log for the old station sign.',
-    'Row 14: Replacement lettering ordered - the original plaque underneath reads differently under UV light.',
-    'Row 22: Cost overrun flagged, reason left blank.',
+    'Refurbishment ledger for the old station sign, cross-checked against town spending records.',
+    'Row 14: relettering ordered. Under UV the original plaque underneath reads differently. I did not imagine this — I checked it twice, at night, alone, which in hindsight was not my best decision.',
+    'Row 22: cost overrun flagged, reason left blank. Same handwriting as the charter\'s smudged signature. I am almost certain of it.',
   ],
   archivedb: [
     'CONNECTING TO JUNCTION_ARCHIVE_DB...',
     'ACCESS LEVEL: HISTORIAN (READ-ONLY)',
     '',
-    'WARNING: 3 records flagged "DO NOT DIGITIZE" by the previous archivist.',
+    '3 records flagged "DO NOT DIGITIZE" by the previous archivist, no reason given.',
+    'Naturally, those are the three I want most.',
   ],
 };
 
 const JOURNAL_ENTRIES = [
-  'Entry 147: Found new evidence of the original railway bridge materials...',
-  'Note: Need to cross-reference property surveys from 1952...',
-  'Task: Digitizing the oral history recordings continues (85% complete)...',
-  "Thought: Found a curious note about 'Harvest Cosmic Junction' folklore...",
+  'Entry 147: New evidence on the original railway bridge materials — the timber doesn\'t match anything regionally sourced in 1918. Ordering a second opinion.',
+  'Note to self: cross-reference the 1952 survey against the charter\'s Article 7 language before I forget the wording again.',
+  'Task: oral history digitization at 85%. The tapes get quieter whenever the junction comes up. Might be the recorder. Might not be.',
+  "Thought: keep finding the phrase 'Harvest Cosmic Junction' in places it shouldn't be — margins, ledgers, one survey map's verso. Someone else was keeping notes before me.",
 ];
 
 interface OpenWindow {
@@ -190,24 +191,12 @@ export default function KristinDesktop({ onLogout }: { onLogout: () => void }) {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none font-mono">
-           {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork).
-          Stretched to fill the full viewport in any orientation, so the logo
-          and strawberries are both always fully visible with no cropping. */}
-             {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork).
-          Sharp layer keeps the image at its true aspect ratio (fit, not
-          stretched/deformed); a blurred, scaled copy behind it fills any
-          leftover edge space so there's no empty gutter. */}
+      {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork),
+          composed natively for landscape (~16:9) so it fills the screen
+          edge-to-edge with no stretching and minimal cropping. */}
       <div
-        className="absolute inset-0 bg-cover bg-center scale-110 blur-2xl"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')" }}
-      />
-          {/* Illustrated sunset/train-station wallpaper (logo baked into the artwork).
-          background-size: cover always fills the screen edge-to-edge at true
-          aspect ratio (no stretching/distortion) in any orientation - the
-          trade-off is some cropping at the edges instead of empty gutters. */}
-      <div
-        className="absolute inset-0 bg-cover"
-        style={{ backgroundImage: "url('/kristin-desktop-bg.png')", backgroundPosition: 'center 20%' }}
+        className="absolute inset-0 bg-no-repeat bg-cover bg-center"
+        style={{ backgroundImage: "url('/kristin-desktop-bg-landscape.png')" }}
       />
 
       {/* Sticky notes */}
