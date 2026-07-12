@@ -95,14 +95,13 @@ interface OpenWindow {
 const CANVAS_W = 922;
 const CANVAS_H = 1092;
 
-// Measures the container and computes the "cover" size for the canvas image
-// (scaled up just enough to fill the container on both axes, like
-// background-size: cover), so the image fills the screen edge-to-edge with
-// no empty gutters. Hotspots are positioned as percentages of this same
-// scaled box, so they stay pixel-aligned with the printed icons even though
-// the box itself is now larger than the visible viewport and gets clipped
-// by the parent's overflow-hidden.
-function useCoverSize(containerRef: React.RefObject<HTMLDivElement | null>) {
+// Measures the container and computes the "contain" size for the canvas
+// image (scaled down just enough to fit inside the container on both axes,
+// like background-size: contain), so the FULL image - every folder and icon
+// - is always visible and never cropped, in portrait or landscape. Hotspots
+// are positioned as percentages of this same box, so they always land on
+// the right icon since the box is never cropped, only ever letterboxed.
+function useContainSize(containerRef: React.RefObject<HTMLDivElement | null>) {
   const [size, setSize] = useState({ width: CANVAS_W, height: CANVAS_H });
 
   useEffect(() => {
@@ -112,7 +111,7 @@ function useCoverSize(containerRef: React.RefObject<HTMLDivElement | null>) {
       const cw = el.clientWidth;
       const ch = el.clientHeight;
       if (!cw || !ch) return;
-      const scale = Math.max(cw / CANVAS_W, ch / CANVAS_H);
+      const scale = Math.min(cw / CANVAS_W, ch / CANVAS_H);
       setSize({ width: CANVAS_W * scale, height: CANVAS_H * scale });
     };
     compute();
@@ -235,7 +234,7 @@ export default function TaylorDesktop({ onLogout }: { onLogout: () => void }) {
   const [currentTime, setCurrentTime] = useState('');
   const nextOffset = useRef(0);
   const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const canvasSize = useCoverSize(canvasContainerRef);
+  const canvasSize = useContainSize(canvasContainerRef);
 
   useEffect(() => {
     const updateClock = () => {
@@ -272,12 +271,10 @@ export default function TaylorDesktop({ onLogout }: { onLogout: () => void }) {
 
   return (
     <div className="relative w-screen h-screen overflow-hidden select-none font-sans bg-[#2a2a30] flex flex-col">
-      {/* Case-file canvas. The real artwork fills the container edge-to-edge
-          (like background-size: cover - no empty gutters, in portrait or
-          landscape) via a JS-measured scale rather than a CSS crop, so the
-          invisible hotspots below - positioned as percentages of that same
-          scaled box - stay pixel-aligned with the printed icons no matter
-          how much of the image ends up clipped by this container. */}
+      {/* Case-file canvas. The full artwork is always shown in full (never
+          cropped) so every folder and icon, both tabs, and both sticky
+          notes stay visible and reachable in both portrait and landscape;
+          any leftover edge space is a plain solid fill (no blur). */}
       <div ref={canvasContainerRef} className="flex-1 relative overflow-hidden">
         <div
           className="absolute top-1/2 left-1/2"
